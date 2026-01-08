@@ -1,0 +1,47 @@
+<?php
+
+namespace App\Repositories\{{MODULE}}\Interfaces;
+
+
+interface {{REPOSITORY_INTERFACE}}
+{
+    /**
+     * Get paginated records
+     */
+    public function getPaginated(array $filters = [], int $perPage = 10);
+
+    /**
+     * Get all records with optional filters
+     */
+    public function getAll(array $filters = []);
+
+    /**
+     * Get a record by ID
+     */
+    public function getById($id);
+
+    /**
+     * Create a new record
+     */
+    public function create(array $data);
+
+    /**
+     * Update a record by ID
+     */
+    public function update(${{LCFIRST_NAME}}, array $data);
+
+    /**
+     * Delete a record by ID
+     */
+    public function delete(${{LCFIRST_NAME}});
+
+    /**
+     * Find records by specific criteria
+     */
+    public function findBy(array $criteria);
+
+    /**
+     * Find a single record by specific criteria
+     */
+    public function findOneBy(array $criteria);
+}

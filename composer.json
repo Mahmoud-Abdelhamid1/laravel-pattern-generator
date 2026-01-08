@@ -1,0 +1,28 @@
+{
+    "name": "MahmoudAbdelhamid/laravel-pattern-generator",
+    "description": "Generate Repository-Service-Controller patterns in Laravel",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["laravel", "pattern", "generator", "repository", "service"],
+    "authors": [
+        {
+            "name": "Mahmoud Abdelhamid",
+            "email": "mahmoudabdelhamid715@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.1|^8.2|^8.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "MahmoudAbdelhamid\\PatternGenerator\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "MahmoudAbdelhamid\\PatternGenerator\\Providers\\PatternGeneratorServiceProvider"
+            ]
+        }
+    }
+}

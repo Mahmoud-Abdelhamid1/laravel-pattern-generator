@@ -1,0 +1,67 @@
+<?php
+
+namespace App\Http\Controllers\{{MODULE}};
+
+use Illuminate\Routing\Controller;
+use App\Services\{{MODULE}}\Interfaces\{{SERVICE_INTERFACE}};
+use App\Http\Requests\{{MODULE}}\{{NAME}}\StoreRequest;
+use App\Http\Requests\{{MODULE}}\{{NAME}}\UpdateRequest;
+use MahmoudAbdelhamid\PatternGenerator\Traits\ApiResponserTrait;
+
+class {{CONTROLLER_NAME}} extends Controller
+{
+    use ApiResponserTrait;
+
+    private {{SERVICE_INTERFACE}} ${{LCFIRST_SERVICE}};
+
+    public function __construct({{SERVICE_INTERFACE}} ${{LCFIRST_SERVICE}})
+    {
+        $this->{{LCFIRST_SERVICE}} = ${{LCFIRST_SERVICE}};
+
+        // Uncomment these if you want auto-generated role_permission middleware
+        // $this->middleware('role_permission:show_{{LCFIRST_NAME}}s', ['only' => ['index', 'show', 'getAll']]);
+        // $this->middleware('role_permission:store_{{LCFIRST_NAME}}s', ['only' => ['store']]);
+        // $this->middleware('role_permission:update_{{LCFIRST_NAME}}s', ['only' => ['update']]);
+        // $this->middleware('role_permission:destroy_{{LCFIRST_NAME}}s', ['only' => ['destroy']]);
+    }
+
+    public function index()
+    {
+        $filters = request()->only(['sort_by', 'sort_direction']);
+        $perPage = request('per_page', 10);
+        $data = $this->{{LCFIRST_SERVICE}}->getPaginated($filters, $perPage);
+        return $this->successResponse(status: true, data: $data);
+    }
+    public function getAll()
+    {
+        $filters = request()->only(['sort_by', 'sort_direction']);
+        $data = $this->{{LCFIRST_SERVICE}}->getAll($filters);
+        return $this->successResponse(status: true, data: $data);
+    }
+
+    public function show($id)
+    {
+        $data = $this->{{LCFIRST_SERVICE}}->getById($id);
+        return $this->successResponse(status: true, data: $data);
+    }
+
+    public function store(StoreRequest $request)
+    {
+        $data = $request->validated();
+        $this->{{LCFIRST_SERVICE}}->create($data);
+        return $this->successResponse(status: true, data: ["message" => __('validation.custom.record.added')]);
+    }
+
+    public function update(UpdateRequest $request, $id)
+    {
+        $data = $request->validated();
+        $this->{{LCFIRST_SERVICE}}->update($id, $data);
+        return $this->successResponse(status: true, data: ["message" => __('validation.custom.record.updated')]);
+    }
+
+    public function destroy($id)
+    {
+        $this->{{LCFIRST_SERVICE}}->delete($id);
+        return $this->successResponse(status: true, data: ["message" => __('validation.custom.record.deleted')]);
+    }
+}

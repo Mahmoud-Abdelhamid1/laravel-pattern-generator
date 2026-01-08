@@ -1,0 +1,73 @@
+<?php
+
+namespace App\Services\{{MODULE}};
+
+use App\Services\{{MODULE}}\Interfaces\{{SERVICE_INTERFACE}};
+use App\Repositories\{{MODULE}}\Interfaces\{{REPOSITORY_INTERFACE}};
+
+class {{SERVICE_NAME}} implements {{SERVICE_INTERFACE}}
+{
+    protected {{REPOSITORY_INTERFACE}} ${{LCFIRST_NAME}}Repository;
+
+    public function __construct({{REPOSITORY_INTERFACE}} ${{LCFIRST_NAME}}Repository)
+    {
+        $this->{{LCFIRST_NAME}}Repository = ${{LCFIRST_NAME}}Repository;
+    }
+
+    /**
+     * Get paginated records
+     */
+    public function getPaginated(array $filters = [], int $perPage = 10)
+    {
+        return $this->{{LCFIRST_NAME}}Repository->getPaginated($filters, $perPage);
+    }
+
+    /**
+     * Get all records with optional filters
+     */
+    public function getAll(array $filters = [])
+    {
+        return $this->{{LCFIRST_NAME}}Repository->getAll($filters);
+    }
+
+    /**
+     * Get a {{LCFIRST_NAME}} by ID
+     */
+    public function getById($id)
+    {
+        ${{LCFIRST_NAME}} = $this->{{LCFIRST_NAME}}Repository->getById($id);
+
+        return ${{LCFIRST_NAME}};
+    }
+
+    /**
+     * Create a new {{LCFIRST_NAME}}
+     */
+    public function create(array $data)
+    {
+        return $this->{{LCFIRST_NAME}}Repository->create($data);
+    }
+
+    /**
+     * Update a {{LCFIRST_NAME}} by ID
+     */
+    public function update($id, array $data)
+    {
+        ${{LCFIRST_NAME}} = $this->{{LCFIRST_NAME}}Repository->findOneBy(['id' => $id]);
+
+        return $this->{{LCFIRST_NAME}}Repository->update(${{LCFIRST_NAME}}, $data);
+    }
+
+    /**
+     * Delete a {{LCFIRST_NAME}} by ID
+     */
+    public function delete($id): bool
+    {
+        ${{LCFIRST_NAME}} = $this->{{LCFIRST_NAME}}Repository->findOneBy(['id' => $id]);
+
+        // Add any business logic here (e.g., check dependencies)
+
+        return $this->{{LCFIRST_NAME}}Repository->delete(${{LCFIRST_NAME}});
+    }
+
+}

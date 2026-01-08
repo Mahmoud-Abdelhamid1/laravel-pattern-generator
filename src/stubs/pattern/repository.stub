@@ -1,0 +1,157 @@
+<?php
+
+namespace App\Repositories\{{MODULE}};
+
+use App\Repositories\{{MODULE}}\Interfaces\{{REPOSITORY_INTERFACE}};
+use App\Models\{{MODULE}}\{{NAME}};
+use MahmoudAbdelhamid\PatternGenerator\Traits\LanguageTrait;
+
+class {{REPOSITORY_NAME}} implements {{REPOSITORY_INTERFACE}}
+{
+    use LanguageTrait;
+    protected $model;
+
+    public function __construct({{MODEL}} $model)
+    {
+        $this->model = $model;
+    }
+
+    /**
+     * Get paginated {{LCFIRST_NAME}}s
+     */
+    public function getPaginated(array $filters = [], int $perPage = 10)
+    {
+        $query = $this->model->newQuery();
+        $query = $this->applyRelatedModels($query);
+        // Apply filters
+        $query = $this->applyFilters($query, $filters);
+
+        return $query->paginate($perPage);
+    }
+
+    /**
+     * Get all {{LCFIRST_NAME}}s with optional filters
+     */
+    public function getAll(array $filters = [])
+    {
+        $query = $this->model->newQuery();
+        $query = $this->applyRelatedModels($query);
+        // Apply filters
+        $query = $this->applyFilters($query, $filters);
+
+        return $query->get();
+    }
+
+    /**
+     * Get a {{LCFIRST_NAME}} by ID
+     */
+    public function getById($id)
+    {
+        $query = $this->model->newQuery();
+        $query = $this->applyRelatedModels($query);
+        return $query->findOrFail($id);
+    }
+
+    /**
+     * Create a new {{LCFIRST_NAME}}
+     */
+    public function create(array $data)
+    {
+        return $this->model->create($data);
+    }
+
+    /**
+     * Update a record by ID
+     */
+    public function update(${{LCFIRST_NAME}}, array $data)
+    {
+        if (${{LCFIRST_NAME}}) {
+            ${{LCFIRST_NAME}}->update($data);
+            return ${{LCFIRST_NAME}}->fresh();
+        }
+        return null;
+    }
+
+    /**
+     * Delete a {{LCFIRST_NAME}} by ID
+     */
+    public function delete(${{LCFIRST_NAME}}): bool
+    {
+        if (${{LCFIRST_NAME}}) {
+            return ${{LCFIRST_NAME}}->delete();
+        }
+        return false;
+    }
+
+    /**
+     * Find {{LCFIRST_NAME}}s by specific criteria
+     */
+    public function findBy(array $criteria)
+    {
+        $query = $this->model->newQuery();
+
+        foreach ($criteria as $field => $value) {
+            $query->where($field, $value);
+        }
+
+        return $query->get();
+    }
+
+    /**
+     * Find a single {{LCFIRST_NAME}} by specific criteria
+     */
+    public function findOneBy(array $criteria)
+    {
+        $query = $this->model->newQuery();
+
+        foreach ($criteria as $field => $value) {
+            $query->where($field, $value);
+        }
+
+        return $query->first();
+    }
+
+    /**
+     * Apply filters to query
+     */
+    protected function applyFilters($query, array $filters)
+    {
+        // Example filters - customize based on your needs
+        if (isset($filters['search'])) {
+            $query->where('name', 'like', '%' . $filters['search'] . '%');
+        }
+
+        if (isset($filters['status'])) {
+            $query->where('status', $filters['status']);
+        }
+
+        if (isset($filters['created_from'])) {
+            $query->where('created_at', '>=', $filters['created_from']);
+        }
+
+        if (isset($filters['created_to'])) {
+            $query->where('created_at', '<=', $filters['created_to']);
+        }
+
+        // Add sorting
+        if (isset($filters['sort_by'])) {
+            $direction = $filters['sort_direction'] ?? 'asc';
+            $query->orderBy($filters['sort_by'], $direction);
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        return $query;
+    }
+    /**
+     * Get Related Models
+     */
+    protected function applyRelatedModels($query)
+    {
+        $this->lang();
+        return $query->with([
+            "createdBy:id,{$this->name}",
+            "updatedBy:id,{$this->name}"
+        ]);
+    }
+}
